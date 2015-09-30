@@ -5,28 +5,54 @@
  */
 package com.destrosul.view;
 
-
-import com.destrosul.dao.UsuarioDAOImpl;
-import java.awt.EventQueue;
-import java.util.Arrays;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.swing.JFrame;
+import com.destrosul.controller.LoginController;
+import com.destrosul.exception.BusinessException;
+import com.destrosul.model.LoginModel;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
 
 /**
  *
  * @author visitante
  */
-public class Login extends javax.swing.JFrame {
+public class LoginView extends javax.swing.JFrame {
+    
+    private final LoginModel model;
+    private final LoginController controller;
 
     /**
      * Creates new form Login
      */
-    public Login() {
+    public LoginView() {
+        model = new LoginModel();
+        controller = new LoginController(model);
+        
         initComponents();
+        doBindings();
+    }
+    
+    private void doBindings() {
+        BindingGroup bindingGroup = new BindingGroup();
+        
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
+                ELProperty.create("${usuario.nome}"), loginField, BeanProperty.create("text"));
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+        
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
+                ELProperty.create("${usuario.senha}"), senhaField, BeanProperty.create("text"));
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+        
+        bindingGroup.bind();
     }
 
     /**
@@ -40,21 +66,28 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        loginField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        loginButton = new javax.swing.JButton();
+        senhaField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Usuário");
 
         jLabel2.setText("Senha");
 
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        loginButton.setText("Login");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                loginButtonActionPerformed(evt);
+            }
+        });
+
+        senhaField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                senhaFieldKeyReleased(evt);
             }
         });
 
@@ -69,10 +102,10 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1))
+                    .addComponent(loginField, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(senhaField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(loginButton)
                 .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
@@ -81,12 +114,12 @@ public class Login extends javax.swing.JFrame {
                 .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loginField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loginButton)
+                    .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -104,53 +137,25 @@ public class Login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private static boolean isPasswordCorrect(char[] input) {
-    boolean isCorrect = true;
-    char[] correctPassword = { 'b', 'u', 'g', 'a', 'b', 'o', 'o' };
-
-    if (input.length != correctPassword.length) {
-        isCorrect = false;
-    } else {
-        isCorrect = Arrays.equals (input, correctPassword);
-    }
-
-    //Zero out the password.
-    Arrays.fill(correctPassword,'0');
-
-    return isCorrect;
-}
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("projeto_finalPU").createEntityManager();
-        Query query = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.nome = :nome AND u.senha = :senha");
-        query.setParameter("nome",jTextField1.getText());
-        query.setParameter("senha",new String(jPasswordField1.getPassword()));
-        List list = query.getResultList();*/
-        UsuarioDAOImpl usuario = new UsuarioDAOImpl();
-        Boolean valido = usuario.validaLogin(jTextField1.getText(), new String(jPasswordField1.getPassword()));
-        if(valido)
-        {
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        try {
+            controller.doLogin(model.getUsuario());
             this.setVisible(false);
-            /* Create and display the form */
-            EventQueue.invokeLater(() -> {
-                JFrame frame = new JFrame();
-                frame.setContentPane(new UsuarioForm());
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            });
+        } catch (BusinessException ex) {
+            Logger.getLogger(LoginView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        else
-        {
-            JOptionPane.showMessageDialog(this,
-                    "Invalid password. Try again.",
-                    "Error Message",
-                    JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void senhaFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_senhaFieldKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            loginButton.doClick();
         }
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_senhaFieldKeyReleased
 
     /**
      * @param args the command line arguments
@@ -169,30 +174,31 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new LoginView().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton loginButton;
+    private javax.swing.JTextField loginField;
+    private javax.swing.JPasswordField senhaField;
     // End of variables declaration//GEN-END:variables
 }

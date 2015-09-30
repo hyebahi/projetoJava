@@ -5,66 +5,52 @@
  */
 package com.destrosul.entity;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author visitante
+ * @author Leandro
  */
 @Entity
-@Table(name = "usuario")
-@XmlRootElement
+@Table(name = "USUARIO")
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
     @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
-    @NamedQuery(name = "Usuario.findBySuperUsuario", query = "SELECT u FROM Usuario u WHERE u.superUsuario = :superUsuario"),
-    @NamedQuery(name = "Usuario.findByUsuarioSenha", query = "SELECT u FROM Usuario u WHERE u.nome = :nome and u.senha = :senha")})
+    @NamedQuery(name = "Usuario.findByLoginSenha", query = "from Usuario u where u.nome = :nome and u.senha = :senha")})
 public class Usuario implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Column(name = "nome")
+    @Column(name = "ID", nullable = false, precision = 38, scale = 0)
+    private Long id;
+    @Column(name = "NOME", length = 45)
     private String nome;
-    @Column(name = "senha")
+    @Column(name = "SENHA", length = 45)
     private String senha;
-    @Column(name = "super_usuario")
-    private Integer superUsuario;
 
     public Usuario() {
     }
 
-    public Usuario(Integer id) {
+    public Usuario(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        Integer oldId = this.id;
+    public void setId(Long id) {
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getNome() {
@@ -72,9 +58,7 @@ public class Usuario implements Serializable {
     }
 
     public void setNome(String nome) {
-        String oldNome = this.nome;
         this.nome = nome;
-        changeSupport.firePropertyChange("nome", oldNome, nome);
     }
 
     public String getSenha() {
@@ -82,19 +66,7 @@ public class Usuario implements Serializable {
     }
 
     public void setSenha(String senha) {
-        String oldSenha = this.senha;
         this.senha = senha;
-        changeSupport.firePropertyChange("senha", oldSenha, senha);
-    }
-
-    public Integer getSuperUsuario() {
-        return superUsuario;
-    }
-
-    public void setSuperUsuario(Integer superUsuario) {
-        Integer oldSuperUsuario = this.superUsuario;
-        this.superUsuario = superUsuario;
-        changeSupport.firePropertyChange("superUsuario", oldSuperUsuario, superUsuario);
     }
 
     @Override
@@ -119,15 +91,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.haissam.DAO.Usuario[ id=" + id + " ]";
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
+        return "com.destrosul.entity.Usuario[ id=" + id + " ]";
     }
     
 }

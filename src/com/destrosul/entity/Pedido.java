@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -26,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "PEDIDO")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p"),
     @NamedQuery(name = "Pedido.findByIdPedido", query = "SELECT p FROM Pedido p WHERE p.idPedido = :idPedido"),
@@ -42,7 +40,7 @@ public class Pedido implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @Column(name = "ID_PEDIDO")
+    @Column(name = "ID_PEDIDO", nullable = false, precision = 38, scale = 0)
     private BigDecimal idPedido;
     @Column(name = "NUMERO")
     private BigInteger numero;
@@ -57,9 +55,9 @@ public class Pedido implements Serializable {
     @Column(name = "DT_ENTREGA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dtEntrega;
-    @Column(name = "OBSERVACOES")
+    @Column(name = "OBSERVACOES", length = 250)
     private String observacoes;
-    @Column(name = "TRANSPORTADORA")
+    @Column(name = "TRANSPORTADORA", length = 250)
     private String transportadora;
 
     public Pedido() {
@@ -155,7 +153,7 @@ public class Pedido implements Serializable {
 
     @Override
     public String toString() {
-        return "com.destrosul.model.Pedido[ idPedido=" + idPedido + " ]";
+        return "com.destrosul.entity.Pedido[ idPedido=" + idPedido + " ]";
     }
     
 }

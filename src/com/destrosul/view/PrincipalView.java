@@ -5,14 +5,11 @@
  */
 package com.destrosul.view;
 
-import com.sun.tracing.dtrace.ArgsAttributes;
-
 /**
  *
- * @author Leandro
+ * @author visitante
  */
 public class PrincipalView extends javax.swing.JFrame {
-    private String[] args;
 
     /**
      * Creates new form Principal
@@ -30,119 +27,79 @@ public class PrincipalView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
-        BtCliente = new javax.swing.JButton();
-        BtProduto = new javax.swing.JButton();
-        BtPedido = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        openMenuItem = new javax.swing.JMenuItem();
+        saveMenuItem = new javax.swing.JMenuItem();
+        saveAsMenuItem = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Principal");
 
-        jButton2.setText("Cliente");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        fileMenu.setMnemonic('f');
+        fileMenu.setText("Cadastros");
 
-        BtCliente.setText("Cliente");
-        BtCliente.addActionListener(new java.awt.event.ActionListener() {
+        openMenuItem.setMnemonic('o');
+        openMenuItem.setText("Usuário");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtClienteActionPerformed(evt);
+                openMenuItemActionPerformed(evt);
             }
         });
+        fileMenu.add(openMenuItem);
 
-        BtProduto.setText("Produto");
-        BtProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtProdutoActionPerformed(evt);
-            }
-        });
+        saveMenuItem.setMnemonic('s');
+        saveMenuItem.setText("Produto");
+        fileMenu.add(saveMenuItem);
 
-        BtPedido.setText("jButton1");
+        saveAsMenuItem.setMnemonic('a');
+        saveAsMenuItem.setText("Pedido");
+        fileMenu.add(saveAsMenuItem);
+
+        menuBar.add(fileMenu);
+
+        jMenu3.setText("Consultas");
+        menuBar.add(jMenu3);
+
+        jMenu2.setText("Relatórios");
+        menuBar.add(jMenu2);
+
+        jMenu1.setText("Ajuda");
+        menuBar.add(jMenu1);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(BtProduto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                            .addComponent(BtCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(53, 53, 53)
-                        .addComponent(BtPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(336, Short.MAX_VALUE))
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtCliente)
-                    .addComponent(BtPedido))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtProduto)
-                .addContainerGap(352, Short.MAX_VALUE))
+            .addGap(0, 279, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtClienteActionPerformed
-       ClienteView.main(args);
-    }//GEN-LAST:event_BtClienteActionPerformed
-
-    private void BtProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtProdutoActionPerformed
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
         // TODO add your handling code here:
-       ProdutoView.main(args);
-    }//GEN-LAST:event_BtProdutoActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PrincipalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PrincipalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PrincipalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PrincipalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PrincipalView().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_openMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtCliente;
-    private javax.swing.JButton BtPedido;
-    private javax.swing.JButton BtProduto;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JMenuItem saveAsMenuItem;
+    private javax.swing.JMenuItem saveMenuItem;
     // End of variables declaration//GEN-END:variables
+
 }

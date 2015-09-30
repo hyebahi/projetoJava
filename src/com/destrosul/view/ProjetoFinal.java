@@ -17,7 +17,7 @@ public class ProjetoFinal {
     public static void main(String[] args) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
+            new LoginView().setVisible(true);
         });
     }
     

@@ -5,6 +5,10 @@
     <class>com.destrosul.DAO.Usuario</class>
     <class>com.destrosul.entity.Pedido</class>
     <class>com.destrosul.entity.Cliente</class>
+    <class>com.destrosul.entity.Produto</class>
+    <class>com.destrosul.entity.Usuario</class>
+    <class>com.destrosul.entity.Cep</class>
+    <class>com.destrosul.entity.LinhaPedido</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
       <property name="javax.persistence.jdbc.user" value="destrosul"/>

@@ -6,11 +6,6 @@
 package com.destrosul.view;
 
 import java.awt.EventQueue;
-import java.beans.Beans;
-import java.util.ArrayList;
-
-import java.util.List;
-import javax.persistence.RollbackException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -22,9 +17,7 @@ public class UsuarioForm extends JPanel {
     
     public UsuarioForm() {
         initComponents();
-        if (!Beans.isDesignTime()) {
-            entityManager.getTransaction().begin();
-        }
+       
     }
 
     /**
@@ -37,9 +30,6 @@ public class UsuarioForm extends JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("projeto_finalPU").createEntityManager();
-        query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT u FROM Usuario u");
-        list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
         idLabel = new javax.swing.JLabel();
@@ -57,21 +47,14 @@ public class UsuarioForm extends JPanel {
 
         FormListener formListener = new FormListener();
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
-        columnBinding.setColumnName("Id");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
-        columnBinding.setColumnName("Nome");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${senha}"));
-        columnBinding.setColumnName("Senha");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${superUsuario}"));
-        columnBinding.setColumnName("Super Usuario");
-        columnBinding.setColumnClass(Integer.class);
-        bindingGroup.addBinding(jTableBinding);
+        masterTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
+            },
+            new String [] {
+
+            }
+        ));
         masterScrollPane.setViewportView(masterTable);
 
         idLabel.setText("Id:");
@@ -214,65 +197,31 @@ public class UsuarioForm extends JPanel {
 
     @SuppressWarnings("unchecked")
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
-        java.util.Collection data = query.getResultList();
-        for (Object entity : data) {
-            entityManager.refresh(entity);
-        }
-        list.clear();
-        list.addAll(data);
+        
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int[] selected = masterTable.getSelectedRows();
-        List<com.haissam.DAO.Usuario> toRemove = new ArrayList<com.haissam.DAO.Usuario>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            com.haissam.DAO.Usuario u = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(u);
-            entityManager.remove(u);
-        }
-        list.removeAll(toRemove);
+       
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        com.haissam.DAO.Usuario u = new com.haissam.DAO.Usuario();
-        entityManager.persist(u);
-        list.add(u);
-        int row = list.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+       
     }//GEN-LAST:event_newButtonActionPerformed
     
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<com.haissam.DAO.Usuario> merged = new ArrayList<com.haissam.DAO.Usuario>(list.size());
-            for (com.haissam.DAO.Usuario u : list) {
-                merged.add(entityManager.merge(u));
-            }
-            list.clear();
-            list.addAll(merged);
-        }
+        
     }//GEN-LAST:event_saveButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
-    private javax.persistence.EntityManager entityManager;
     private javax.swing.JTextField idField;
     private javax.swing.JLabel idLabel;
-    private java.util.List<com.haissam.DAO.Usuario> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JButton newButton;
     private javax.swing.JTextField nomeField;
     private javax.swing.JLabel nomeLabel;
-    private javax.persistence.Query query;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JTextField senhaField;
