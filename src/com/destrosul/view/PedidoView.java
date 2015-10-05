@@ -5,8 +5,8 @@
  */
 package com.destrosul.view;
 
-import com.destrosul.controller.LoginController;
-import com.destrosul.model.LoginModel;
+import com.destrosul.controller.PedidoController;
+import com.destrosul.model.PedidoModel;
 import javax.swing.JFrame;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -21,18 +21,19 @@ import org.jdesktop.beansbinding.ELProperty;
  */
 public class PedidoView extends javax.swing.JFrame {
 
-    private final LoginModel model;
-    private final LoginController controller;
+    private final PedidoModel model;
+    private final PedidoController controller;
+
     /**
      * Creates new form PedidoView
      */
     public PedidoView() {
-        model = new LoginModel();
-        controller = new LoginController(model);
-        
+        model = new PedidoModel();
+        controller = new PedidoController(model);
+
         initComponents();
         doBindings();
-        
+
     }
 
     /**
@@ -436,15 +437,15 @@ public class PedidoView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void doBindings() {
-      
+
         BindingGroup bindingGroup = new BindingGroup();
-        
+
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
                 ELProperty.create("${pedido.numero}"), FieldNumero, BeanProperty.create("text"));
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
-        
+
         bindingGroup.bind();
-    
+
     }
 }
