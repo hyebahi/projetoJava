@@ -13,9 +13,9 @@ import javax.swing.JPanel;
  *
  * @author visitante
  */
-public class UsuarioForm extends JPanel {
+public class UsuarioView extends JPanel {
     
-    public UsuarioForm() {
+    public UsuarioView() {
         initComponents();
        
     }
@@ -179,16 +179,16 @@ public class UsuarioForm extends JPanel {
         FormListener() {}
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             if (evt.getSource() == saveButton) {
-                UsuarioForm.this.saveButtonActionPerformed(evt);
+                UsuarioView.this.saveButtonActionPerformed(evt);
             }
             else if (evt.getSource() == refreshButton) {
-                UsuarioForm.this.refreshButtonActionPerformed(evt);
+                UsuarioView.this.refreshButtonActionPerformed(evt);
             }
             else if (evt.getSource() == newButton) {
-                UsuarioForm.this.newButtonActionPerformed(evt);
+                UsuarioView.this.newButtonActionPerformed(evt);
             }
             else if (evt.getSource() == deleteButton) {
-                UsuarioForm.this.deleteButtonActionPerformed(evt);
+                UsuarioView.this.deleteButtonActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -244,22 +244,23 @@ public class UsuarioForm extends JPanel {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UsuarioForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UsuarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UsuarioForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UsuarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UsuarioForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UsuarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UsuarioForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UsuarioView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 JFrame frame = new JFrame();
-                frame.setContentPane(new UsuarioForm());
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setContentPane(new UsuarioView());
+                frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 frame.pack();
                 frame.setVisible(true);
             }

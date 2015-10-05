@@ -5,17 +5,34 @@
  */
 package com.destrosul.view;
 
+import com.destrosul.controller.LoginController;
+import com.destrosul.model.LoginModel;
+import javax.swing.JFrame;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+
 /**
  *
  * @author Leandro
  */
 public class PedidoView extends javax.swing.JFrame {
 
+    private final LoginModel model;
+    private final LoginController controller;
     /**
      * Creates new form PedidoView
      */
     public PedidoView() {
+        model = new LoginModel();
+        controller = new LoginController(model);
+        
         initComponents();
+        doBindings();
+        
     }
 
     /**
@@ -27,21 +44,329 @@ public class PedidoView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        FieldNumero = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        DtEmissao = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        FieldCliente = new javax.swing.JTextField();
+        FieldDtPedido = new javax.swing.JTextField();
+        FieldDtEntrega = new javax.swing.JTextField();
+        FieldObservacoes = new javax.swing.JTextField();
+        FieldTransportadora = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jToolBar1 = new javax.swing.JToolBar();
+        BtNovo = new javax.swing.JButton();
+        BtSalvar = new javax.swing.JButton();
+        BtLimpar = new javax.swing.JButton();
+        BtExcluir = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        BtPrimeiro = new javax.swing.JButton();
+        BtAnterior = new javax.swing.JButton();
+        BtProximo = new javax.swing.JButton();
+        BtUltimo = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Pedido");
+
+        jLabel1.setText("Número");
+
+        jLabel2.setText("Data Emissão");
+
+        jLabel3.setText("Cliente");
+
+        jLabel4.setText("Data Pedido");
+
+        jLabel5.setText("Observações");
+
+        jLabel6.setText("Transportadora");
+
+        jLabel7.setText("Data Entrega");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(FieldObservacoes)
+                    .addComponent(FieldCliente)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(FieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DtEmissao, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(FieldTransportadora, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(FieldDtPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                                .addComponent(jLabel7)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(FieldDtEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FieldNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(DtEmissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FieldCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FieldDtPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FieldDtEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FieldObservacoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FieldTransportadora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        FieldNumero.getAccessibleContext().setAccessibleName("Pedido");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jToolBar1.setRollover(true);
+
+        BtNovo.setText("Novo");
+        BtNovo.setFocusable(false);
+        BtNovo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtNovo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtNovoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtNovo);
+
+        BtSalvar.setText("Salvar");
+        BtSalvar.setFocusable(false);
+        BtSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtSalvarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtSalvar);
+
+        BtLimpar.setText("Limpar");
+        BtLimpar.setFocusable(false);
+        BtLimpar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtLimpar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtLimparActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtLimpar);
+
+        BtExcluir.setText("Excluir");
+        BtExcluir.setFocusable(false);
+        BtExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtExcluirActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtExcluir);
+        jToolBar1.add(jSeparator1);
+
+        BtPrimeiro.setText("<< Primeiro");
+        BtPrimeiro.setFocusable(false);
+        BtPrimeiro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtPrimeiro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtPrimeiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtPrimeiroActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtPrimeiro);
+
+        BtAnterior.setText("< Anterior");
+        BtAnterior.setFocusable(false);
+        BtAnterior.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtAnterior.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtAnteriorActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtAnterior);
+
+        BtProximo.setText("Próximo >");
+        BtProximo.setFocusable(false);
+        BtProximo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtProximo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtProximo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtProximoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtProximo);
+
+        BtUltimo.setText("Último >>");
+        BtUltimo.setFocusable(false);
+        BtUltimo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtUltimo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtUltimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtUltimoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtUltimo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 513, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 365, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BtNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtNovoActionPerformed
+//        com.destrosul.entity.Cliente a = new com.destrosul.entity.Cliente();
+//        entityManagerCliente.persist(a);
+//        clienteList.add(a);
+//        int row = clienteList.size() - 1;
+//        ClienteTable.setRowSelectionInterval(row, row);
+//        ClienteTable.scrollRectToVisible(ClienteTable.getCellRect(row, 0, true));
+    }//GEN-LAST:event_BtNovoActionPerformed
+
+    private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
+//        try {
+//            entityManagerCliente.getTransaction().commit();
+//            entityManagerCliente.getTransaction().begin();
+//            JOptionPane.showMessageDialog(null, "Salvo!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+//        } catch (RollbackException rex) {
+//            rex.printStackTrace();
+//            entityManagerCliente.getTransaction().begin();
+//            List<com.destrosul.entity.Cliente> merged = new ArrayList<com.destrosul.entity.Cliente>(clienteList.size());
+//            for (com.destrosul.entity.Cliente a : clienteList) {
+//                merged.add(entityManagerCliente.merge(a));
+//            }
+//            clienteList.clear();
+//            clienteList.addAll(merged);
+//        }
+    }//GEN-LAST:event_BtSalvarActionPerformed
+
+    private void BtLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLimparActionPerformed
+//        entityManagerCliente.getTransaction().rollback();
+//        entityManagerCliente.getTransaction().begin();
+//        java.util.Collection data = clienteQuery.getResultList();
+//        for (Object entity : data) {
+//            entityManagerCliente.refresh(entity);
+//        }
+//        clienteList.clear();
+//        clienteList.addAll(data);
+    }//GEN-LAST:event_BtLimparActionPerformed
+
+    private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed
+//        int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro selecionado?", "Confirmação", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+//        if (opcao == JOptionPane.OK_OPTION) {
+//            int[] selected = ClienteTable.getSelectedRows();
+//            List<com.destrosul.entity.Cliente> toRemove = new ArrayList<com.destrosul.entity.Cliente>(selected.length);
+//            for (int idx = 0; idx < selected.length; idx++) {
+//                com.destrosul.entity.Cliente a = clienteList.get(ClienteTable.convertRowIndexToModel(selected[idx]));
+//                toRemove.add(a);
+//                entityManagerCliente.remove(a);
+//            }
+//            clienteList.removeAll(toRemove);
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Operação cancelada!", "Informação", JOptionPane.INFORMATION_MESSAGE);
+//        }
+    }//GEN-LAST:event_BtExcluirActionPerformed
+
+    private void BtPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtPrimeiroActionPerformed
+//        if (ClienteTable.getModel().getRowCount() > 0) {
+//            ClienteTable.setRowSelectionInterval(0, 0);
+//        }
+    }//GEN-LAST:event_BtPrimeiroActionPerformed
+
+    private void BtAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtAnteriorActionPerformed
+//        if (ClienteTable.getModel().getRowCount() > 0) {
+//            int row = ClienteTable.getSelectedRow() - 1;
+//            if (row >= 0) {
+//                ClienteTable.setRowSelectionInterval(row, row);
+//            }
+//        }
+    }//GEN-LAST:event_BtAnteriorActionPerformed
+
+    private void BtProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtProximoActionPerformed
+//        if (ClienteTable.getModel().getRowCount() > 0) {
+//            int row = ClienteTable.getSelectedRow() + 1;
+//            if (row < ClienteTable.getRowCount()) {
+//                ClienteTable.setRowSelectionInterval(row, row);
+//            }
+//        }
+    }//GEN-LAST:event_BtProximoActionPerformed
+
+    private void BtUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtUltimoActionPerformed
+//        if (ClienteTable.getModel().getRowCount() > 0) {
+//            int row = ClienteTable.getRowCount() - 1;
+//            ClienteTable.setRowSelectionInterval(row, row);
+//        }
+    }//GEN-LAST:event_BtUltimoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -73,11 +398,53 @@ public class PedidoView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PedidoView().setVisible(true);
+                PedidoView PedidoView = new PedidoView();
+                PedidoView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                PedidoView.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtAnterior;
+    private javax.swing.JButton BtExcluir;
+    private javax.swing.JButton BtLimpar;
+    private javax.swing.JButton BtNovo;
+    private javax.swing.JButton BtPrimeiro;
+    private javax.swing.JButton BtProximo;
+    private javax.swing.JButton BtSalvar;
+    private javax.swing.JButton BtUltimo;
+    private javax.swing.JTextField DtEmissao;
+    private javax.swing.JTextField FieldCliente;
+    private javax.swing.JTextField FieldDtEntrega;
+    private javax.swing.JTextField FieldDtPedido;
+    private javax.swing.JTextField FieldNumero;
+    private javax.swing.JTextField FieldObservacoes;
+    private javax.swing.JTextField FieldTransportadora;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+
+    private void doBindings() {
+      
+        BindingGroup bindingGroup = new BindingGroup();
+        
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
+                ELProperty.create("${pedido.numero}"), FieldNumero, BeanProperty.create("text"));
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+        
+        bindingGroup.bind();
+    
+    }
 }

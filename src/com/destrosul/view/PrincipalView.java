@@ -29,9 +29,10 @@ public class PrincipalView extends javax.swing.JFrame {
 
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        openMenuItem = new javax.swing.JMenuItem();
-        saveMenuItem = new javax.swing.JMenuItem();
-        saveAsMenuItem = new javax.swing.JMenuItem();
+        MenuOpenUsuario = new javax.swing.JMenuItem();
+        MenuOpenProduto = new javax.swing.JMenuItem();
+        MenuOpenPedido = new javax.swing.JMenuItem();
+        MenuOpenCliente = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
@@ -42,22 +43,40 @@ public class PrincipalView extends javax.swing.JFrame {
         fileMenu.setMnemonic('f');
         fileMenu.setText("Cadastros");
 
-        openMenuItem.setMnemonic('o');
-        openMenuItem.setText("Usuário");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        MenuOpenUsuario.setMnemonic('o');
+        MenuOpenUsuario.setText("Usuário");
+        MenuOpenUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openMenuItemActionPerformed(evt);
+                MenuOpenUsuarioActionPerformed(evt);
             }
         });
-        fileMenu.add(openMenuItem);
+        fileMenu.add(MenuOpenUsuario);
 
-        saveMenuItem.setMnemonic('s');
-        saveMenuItem.setText("Produto");
-        fileMenu.add(saveMenuItem);
+        MenuOpenProduto.setMnemonic('s');
+        MenuOpenProduto.setText("Produto");
+        MenuOpenProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuOpenProdutoActionPerformed(evt);
+            }
+        });
+        fileMenu.add(MenuOpenProduto);
 
-        saveAsMenuItem.setMnemonic('a');
-        saveAsMenuItem.setText("Pedido");
-        fileMenu.add(saveAsMenuItem);
+        MenuOpenPedido.setMnemonic('a');
+        MenuOpenPedido.setText("Pedido");
+        MenuOpenPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuOpenPedidoActionPerformed(evt);
+            }
+        });
+        fileMenu.add(MenuOpenPedido);
+
+        MenuOpenCliente.setText("Cliente");
+        MenuOpenCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuOpenClienteActionPerformed(evt);
+            }
+        });
+        fileMenu.add(MenuOpenCliente);
 
         menuBar.add(fileMenu);
 
@@ -87,19 +106,32 @@ public class PrincipalView extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_openMenuItemActionPerformed
+    private void MenuOpenClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenClienteActionPerformed
+        ClienteView.main(null);
+    }//GEN-LAST:event_MenuOpenClienteActionPerformed
+
+    private void MenuOpenUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenUsuarioActionPerformed
+        UsuarioView.main(null);
+    }//GEN-LAST:event_MenuOpenUsuarioActionPerformed
+
+    private void MenuOpenPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenPedidoActionPerformed
+      PedidoView.main(null);
+    }//GEN-LAST:event_MenuOpenPedidoActionPerformed
+
+    private void MenuOpenProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenProdutoActionPerformed
+      ProdutoView.main(null);
+    }//GEN-LAST:event_MenuOpenProdutoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuOpenCliente;
+    private javax.swing.JMenuItem MenuOpenPedido;
+    private javax.swing.JMenuItem MenuOpenProduto;
+    private javax.swing.JMenuItem MenuOpenUsuario;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem saveAsMenuItem;
-    private javax.swing.JMenuItem saveMenuItem;
     // End of variables declaration//GEN-END:variables
-
+   private javax.swing.JDesktopPane desktopPane;
 }

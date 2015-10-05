@@ -25,8 +25,8 @@ import org.jdesktop.beansbinding.ELProperty;
  */
 public class LoginView extends javax.swing.JFrame {
     
-    private final LoginModel model;
-    private final LoginController controller;
+        private final LoginModel model;
+        private final LoginController controller;
 
     /**
      * Creates new form Login
