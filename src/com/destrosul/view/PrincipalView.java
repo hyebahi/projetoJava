@@ -5,6 +5,9 @@
  */
 package com.destrosul.view;
 
+import com.destrosul.session.SessionManager;
+import com.destrosul.util.JPAUtil;
+
 /**
  *
  * @author visitante
@@ -15,7 +18,25 @@ public class PrincipalView extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public PrincipalView() {
+        init();
         initComponents();
+        doLogin();
+    }
+
+    private void init() {
+        new Thread(() -> {
+            JPAUtil.createEntityManagerFactory();
+        }).start();
+    }
+
+    private void doLogin() {
+        if (SessionManager.getUsuarioLogado() == null) {
+            new Thread(() -> {
+                LoginView login = new LoginView(this, true);
+                login.setLocationRelativeTo(null);
+                login.setVisible(true);
+            }).start();
+        };
     }
 
     /**
@@ -39,6 +60,8 @@ public class PrincipalView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Principal");
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("Cadastros");
@@ -99,7 +122,7 @@ public class PrincipalView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 277, Short.MAX_VALUE)
         );
 
         pack();
@@ -115,12 +138,48 @@ public class PrincipalView extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuOpenUsuarioActionPerformed
 
     private void MenuOpenPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenPedidoActionPerformed
-      PedidoView.main(null);
+        PedidoView.main(null);
     }//GEN-LAST:event_MenuOpenPedidoActionPerformed
 
     private void MenuOpenProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuOpenProdutoActionPerformed
-      ProdutoView.main(null);
+        ProdutoView.main(null);
     }//GEN-LAST:event_MenuOpenProdutoActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            PrincipalView principal = new PrincipalView();
+            principal.setLocationRelativeTo(null);
+            principal.setVisible(true);
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem MenuOpenCliente;

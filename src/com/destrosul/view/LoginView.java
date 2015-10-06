@@ -8,9 +8,12 @@ package com.destrosul.view;
 import com.destrosul.controller.LoginController;
 import com.destrosul.exception.BusinessException;
 import com.destrosul.model.LoginModel;
+import com.destrosul.util.JPAUtil;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -23,35 +26,40 @@ import org.jdesktop.beansbinding.ELProperty;
  *
  * @author visitante
  */
-public class LoginView extends javax.swing.JFrame {
-    
-        private final LoginModel model;
-        private final LoginController controller;
+public class LoginView extends JDialog {
+
+    private final LoginModel model;
+    private final LoginController controller;
 
     /**
      * Creates new form Login
+     *
+     * @param owner
+     * @param modal
      */
-    public LoginView() {
+    public LoginView(Frame owner, boolean modal) {
+        super(owner, modal);
+
         model = new LoginModel();
         controller = new LoginController(model);
-        
+
         initComponents();
         doBindings();
     }
-    
+
     private void doBindings() {
         BindingGroup bindingGroup = new BindingGroup();
-        
+
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
                 ELProperty.create("${usuario.nome}"), loginField, BeanProperty.create("text"));
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
-        
+
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
                 ELProperty.create("${usuario.senha}"), senhaField, BeanProperty.create("text"));
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
-        
+
         bindingGroup.bind();
     }
 
@@ -71,8 +79,14 @@ public class LoginView extends javax.swing.JFrame {
         loginButton = new javax.swing.JButton();
         senhaField = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Login");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("Usuário");
 
@@ -157,41 +171,13 @@ public class LoginView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_senhaFieldKeyReleased
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginView().setVisible(true);
-            }
-        });
-    }
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        new Thread(() -> {
+            JPAUtil.closeEntityManagerFactory();
+        }).start();
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

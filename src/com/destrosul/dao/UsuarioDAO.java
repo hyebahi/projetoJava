@@ -6,67 +6,94 @@
 package com.destrosul.dao;
 
 import com.destrosul.entity.Usuario;
+import com.destrosul.exception.BusinessException;
 import com.destrosul.util.JPAUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 /**
  *
- * @author visitante
+ * @author aron.oliveira
  */
 public class UsuarioDAO implements IDAO<Usuario> {
 
-    private final EntityManager entityManager;
+    private final EntityManager manager;
 
+    /**
+     * Construtor da classe
+     */
     public UsuarioDAO() {
-        entityManager = JPAUtil.getEntityManager();
+        manager = JPAUtil.getEntityManager();
     }
 
-    @Override
-    public Usuario save(Usuario usuario) {
-        entityManager.getTransaction().begin();
-        Usuario merged = entityManager.merge(usuario);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        return merged;
-    }
-
-    @Override
-    public void remove(Usuario usuario) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(entityManager.merge(usuario));
-        entityManager.getTransaction().commit();
-        entityManager.close();
-    }
-
-    @Override
-    public Usuario findById(Long codigo) {
-        Usuario u = entityManager.find(Usuario.class, codigo);
-        entityManager.close();
-        return u;
-    }
-
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Usuario> findAll() {
-        TypedQuery<Usuario> query = entityManager.createNamedQuery("Usuario.findAll", Usuario.class);
-        List<Usuario> list = query.getResultList();
-        entityManager.close();
-        return list;
+        List<Usuario> doacoes = manager.createNamedQuery("Usuario.findAll", Usuario.class).getResultList();
+        manager.close();
+        return doacoes;
     }
 
-    public Usuario validaLogin(String usuario, String senha) {
-        TypedQuery<Usuario> query = entityManager.createNamedQuery("Usuario.findByLoginSenha", Usuario.class)
-                .setParameter("nome", usuario)
-                .setParameter("senha", senha);
-        Usuario u = null;
+    /**
+     *
+     * @param usuario
+     * @return
+     * @throws BusinessException
+     */
+    @Override
+    public Usuario save(Usuario usuario) throws BusinessException {
         try {
-            u = query.getSingleResult();
-        } catch (PersistenceException e) {
-            
+            manager.getTransaction().begin();
+            if (!manager.contains(usuario)) {
+                usuario = manager.merge(usuario);
+            }
+            manager.persist(usuario);
+            manager.getTransaction().commit();
+        } catch (RollbackException e) {
+            throw new BusinessException("Erro ao salvar registro: " + usuario, e);
+        } finally {
+            manager.close();
         }
-        entityManager.close();
+        return usuario;
+    }
+
+    @Override
+    public void remove(Usuario usuario) throws BusinessException {
+        try {
+            manager.getTransaction().begin();
+            manager.remove(manager.merge(usuario));
+            manager.getTransaction().commit();
+        } catch (RollbackException e) {
+            throw new BusinessException("Erro ao remover registro: " + usuario, e);
+        } finally {
+            manager.close();
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Usuario findById(Long id) {
+        Usuario usuario = manager.find(Usuario.class, id);
+        manager.close();
+        return usuario;
+    }
+
+    public Usuario findByLoginSenha(final String login, final String senha) {
+        TypedQuery<Usuario> query = manager.createNamedQuery("Usuario.findByLoginSenha", Usuario.class)
+                .setParameter("login", login)
+                .setParameter("senha", senha);
+
+        Usuario u = query.getSingleResult();
+        manager.close();
         return u;
     }
 
