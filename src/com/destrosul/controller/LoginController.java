@@ -26,7 +26,7 @@ public class LoginController {
 
     public void doLogin(Usuario usuario) throws BusinessException {
         UsuarioDAO dao = new UsuarioDAO();
-        Usuario usuarioLogado = dao.validaLogin(usuario.getNome(), usuario.getSenha());
+        Usuario usuarioLogado = dao.findByLoginSenha(usuario.getNome(), usuario.getSenha());
         if (usuarioLogado == null) {
             throw new BusinessException("Usuário e/ou senha inválidos!");
         }
