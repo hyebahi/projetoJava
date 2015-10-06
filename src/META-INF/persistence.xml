@@ -14,6 +14,18 @@
       <property name="javax.persistence.jdbc.user" value="destrosul"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="javax.persistence.jdbc.password" value="destrosul"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <!-- Pool de conexões -->
+      <property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+      <property name="hibernate.c3p0.min_size" value="5"/>
+      <property name="hibernate.c3p0.max_size" value="20"/>
+      <property name="hibernate.c3p0.timeout" value="300"/>
+      <property name="hibernate.c3p0.max_statements" value="50"/>
+      <property name="hibernate.c3p0.idle_test_period" value="300"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
   <persistence-unit name="ProjetoFinalPU" transaction-type="RESOURCE_LOCAL">
