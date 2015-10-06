@@ -21,8 +21,8 @@ import org.jdesktop.beansbinding.ELProperty;
  */
 public class PedidoView extends javax.swing.JFrame {
 
-    private final PedidoModel model;
-    private final PedidoController controller;
+    private PedidoModel model = new PedidoModel();
+    private PedidoController controller = new PedidoController(model);
 
     /**
      * Creates new form PedidoView
@@ -32,8 +32,10 @@ public class PedidoView extends javax.swing.JFrame {
         controller = new PedidoController(model);
 
         initComponents();
-        doBindings();
 
+        controller.PedidoLoad();
+
+        doBindings();
     }
 
     /**
@@ -339,9 +341,7 @@ public class PedidoView extends javax.swing.JFrame {
     }//GEN-LAST:event_BtExcluirActionPerformed
 
     private void BtPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtPrimeiroActionPerformed
-//        if (ClienteTable.getModel().getRowCount() > 0) {
-//            ClienteTable.setRowSelectionInterval(0, 0);
-//        }
+        //controller
     }//GEN-LAST:event_BtPrimeiroActionPerformed
 
     private void BtAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtAnteriorActionPerformed
