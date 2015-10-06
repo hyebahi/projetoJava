@@ -6,8 +6,6 @@
 package com.destrosul.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -44,11 +42,11 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID_PEDIDO", nullable = false, precision = 38, scale = 0)
-    private BigDecimal idPedido;
+    private Long idPedido;
     @Column(name = "NUMERO")
-    private BigInteger numero;
+    private Long numero;
     @Column(name = "ID_CLIENTE")
-    private BigInteger idCliente;
+    private Long idCliente;
     @Column(name = "DT_PEDIDO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dtPedido;
@@ -66,31 +64,31 @@ public class Pedido implements Serializable {
     public Pedido() {
     }
 
-    public Pedido(BigDecimal idPedido) {
+    public Pedido(long idPedido) {
         this.idPedido = idPedido;
     }
 
-    public BigDecimal getIdPedido() {
+    public long getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(BigDecimal idPedido) {
+    public void setIdPedido(long idPedido) {
         this.idPedido = idPedido;
     }
 
-    public BigInteger getNumero() {
+    public long getNumero() {
         return numero;
     }
 
-    public void setNumero(BigInteger numero) {
+    public void setNumero(long numero) {
         this.numero = numero;
     }
 
-    public BigInteger getIdCliente() {
+    public Long getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(BigInteger idCliente) {
+    public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
     }
 
