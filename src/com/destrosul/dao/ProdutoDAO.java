@@ -9,11 +9,10 @@ import com.destrosul.entity.Produto;
 import com.destrosul.util.JPAUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 /**
  *
- * @author visitante
+ * @author Leandro
  */
 public class ProdutoDAO implements IDAO<Produto> {
 
@@ -40,19 +39,27 @@ public class ProdutoDAO implements IDAO<Produto> {
         entityManager.close();
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
-    public Produto findById(Long codigo) {
-        Produto produto = entityManager.find(Produto.class, codigo);
+    public Produto findById(Long id) {
+        Produto produto = entityManager.find(Produto.class, id);
         entityManager.close();
         return produto;
     }
-
+    
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Produto> findAll() {
-        TypedQuery<Produto> query = entityManager.createNamedQuery("Produto.findAll", Produto.class);
-        List<Produto> usuarios = query.getResultList();
+        List<Produto> produtos = entityManager.createNamedQuery("Produto.findAll", Produto.class).getResultList();
         entityManager.close();
-        return usuarios;
-    }
+        return produtos;
+    }  
 
 }

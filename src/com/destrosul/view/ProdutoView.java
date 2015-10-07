@@ -5,14 +5,23 @@
  */
 package com.destrosul.view;
 
+import com.destrosul.controller.ProdutoController;
 import com.destrosul.entity.Produto;
-import java.awt.EventQueue;
-import java.beans.Beans;
+import com.destrosul.model.ProdutoModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.RollbackException;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 
 /**
  *
@@ -20,16 +29,47 @@ import javax.swing.JOptionPane;
  */
 public class ProdutoView extends JFrame {
 
-    
+    private ProdutoModel model = new ProdutoModel();
+    private ProdutoController controller = new ProdutoController(model);
+
     /**
      * Creates new form NewJPanel
      */
     public ProdutoView() {
         initComponents();
-        if (!Beans.isDesignTime()) {
-            entityManager.getTransaction().begin();
-        }
+        controller.carregarProdutos();
+        doBindings();
 
+    }
+
+    private void doBindings() {
+        BindingGroup bindingGroup = new BindingGroup();
+
+        JTableBinding jTableBinding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ, model,
+                ELProperty.create("${produtos}"), masterTable);
+
+        JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${idProduto}"));
+        columnBinding.setColumnName("ID");
+        columnBinding.setColumnClass(Long.class);
+
+        columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${nrProduto}"));
+        columnBinding.setColumnName("Número");
+        columnBinding.setColumnClass(String.class);
+
+        columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${descricao}"));
+        columnBinding.setColumnName("Descrição");
+        columnBinding.setColumnClass(String.class);
+
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ, model,
+                ELProperty.create("${registroSelecionado != null}"), updateButton, BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ, model,
+                ELProperty.create("${registroSelecionado != null}"), removeButton, BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+        bindingGroup.bind();
     }
 
     /**
@@ -42,21 +82,18 @@ public class ProdutoView extends JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("DestrosulPU").createEntityManager();
-        produtoQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT p FROM Produto p");
-        produtoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : produtoQuery.getResultList();
         jPbotoes = new javax.swing.JPanel();
         txCodigo = new javax.swing.JTextField();
         txDescricao = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         BtNovo = new javax.swing.JButton();
         BtSalvar = new javax.swing.JButton();
-        BtLimpar = new javax.swing.JButton();
-        BtExcluir = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
         BtPrimeiro = new javax.swing.JButton();
         BtAnterior = new javax.swing.JButton();
         BtProximo = new javax.swing.JButton();
@@ -67,49 +104,40 @@ public class ProdutoView extends JFrame {
 
         txCodigo.setEnabled(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nrProduto}"), txCodigo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, new javax.swing.JTable(), org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nrProduto}"), txCodigo, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txDescricao.setEnabled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.descricao}"), txDescricao, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, new javax.swing.JTable(), org.jdesktop.beansbinding.ELProperty.create("${selectedElement.descricao}"), txDescricao, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel1.setText("Código");
 
         jLabel2.setText("Descrição");
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, produtoList, masterTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idProduto}"));
-        columnBinding.setColumnName("Id Produto");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nrProduto}"));
-        columnBinding.setColumnName("Nr Produto");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${descricao}"));
-        columnBinding.setColumnName("Descricao");
-        columnBinding.setColumnClass(String.class);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
-        jScrollPane1.setViewportView(masterTable);
+        masterTable.setModel(new ProdutoTableModel());
+        masterTable.getSelectionModel().addListSelectionListener(new ProdutoMasterTableListSelectionListener());
+        jScrollPane2.setViewportView(masterTable);
 
         javax.swing.GroupLayout jPbotoesLayout = new javax.swing.GroupLayout(jPbotoes);
         jPbotoes.setLayout(jPbotoesLayout);
         jPbotoesLayout.setHorizontalGroup(
             jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPbotoesLayout.createSequentialGroup()
-                .addGap(86, 86, 86)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
-                    .addGroup(jPbotoesLayout.createSequentialGroup()
-                        .addGroup(jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txCodigo)
-                            .addComponent(txDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txCodigo)
+                    .addComponent(txDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPbotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
         jPbotoesLayout.setVerticalGroup(
             jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,9 +150,9 @@ public class ProdutoView extends JFrame {
                 .addGroup(jPbotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         BtNovo.setText("Novo");
@@ -141,17 +169,17 @@ public class ProdutoView extends JFrame {
             }
         });
 
-        BtLimpar.setText("Limpar");
-        BtLimpar.addActionListener(new java.awt.event.ActionListener() {
+        updateButton.setText("Alterar");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtLimparActionPerformed(evt);
+                updateButtonActionPerformed(evt);
             }
         });
 
-        BtExcluir.setText("Excluir");
-        BtExcluir.addActionListener(new java.awt.event.ActionListener() {
+        removeButton.setText("Excluir");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtExcluirActionPerformed(evt);
+                removeButtonActionPerformed(evt);
             }
         });
 
@@ -193,9 +221,9 @@ public class ProdutoView extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BtSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BtPrimeiro, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -204,7 +232,7 @@ public class ProdutoView extends JFrame {
                 .addComponent(BtProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BtUltimo, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,8 +241,8 @@ public class ProdutoView extends JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(BtSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BtExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtPrimeiro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtAnterior, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtProximo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -237,23 +265,23 @@ public class ProdutoView extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPbotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jPbotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLimparActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
-        java.util.Collection data = produtoQuery.getResultList();
-        for (Object entity : data) {
-            entityManager.refresh(entity);
-        }
-        produtoList.clear();
-        produtoList.addAll(data);
-    }//GEN-LAST:event_BtLimparActionPerformed
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        /*  entityManager.getTransaction().rollback();
+         entityManager.getTransaction().begin();
+         java.util.Collection data = produtoQuery.getResultList();
+         for (Object entity : data) {
+         entityManager.refresh(entity);
+         }
+         produtoList.clear();
+         produtoList.addAll(data);
+         */
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     private void BtPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtPrimeiroActionPerformed
         if (masterTable.getModel().getRowCount() > 0) {
@@ -286,77 +314,72 @@ public class ProdutoView extends JFrame {
         }
     }//GEN-LAST:event_BtUltimoActionPerformed
 
-    private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro selecionado?", "Confirmação", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (opcao == JOptionPane.OK_OPTION) {
-            int[] selected = masterTable.getSelectedRows();
-            List<Produto> toRemove = new ArrayList<Produto>(selected.length);
-            for (int idx = 0; idx < selected.length; idx++) {
-                 Produto a = produtoList.get(masterTable.convertRowIndexToModel(selected[idx]));
-                toRemove.add(a);
-                entityManager.remove(a);
-            }
-            produtoList.removeAll(toRemove);
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada!", "Informação", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_BtExcluirActionPerformed
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        /* int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro selecionado?", "Confirmação", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+         if (opcao == JOptionPane.OK_OPTION) {
+         int[] selected = masterTable.getSelectedRows();
+         List<Produto> toRemove = new ArrayList<Produto>(selected.length);
+         for (int idx = 0; idx < selected.length; idx++) {
+         Produto a = produtoList.get(masterTable.convertRowIndexToModel(selected[idx]));
+         toRemove.add(a);
+         entityManager.remove(a);
+         }
+         produtoList.removeAll(toRemove);
+         } else {
+         JOptionPane.showMessageDialog(null, "Operação cancelada!", "Informação", JOptionPane.INFORMATION_MESSAGE);
+         }
+         */
+    }//GEN-LAST:event_removeButtonActionPerformed
 
     private void BtNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtNovoActionPerformed
-        /*Produto a = new Produto();
-        entityManager.persist(a);
-        produtoList.add(a);
-        int row = produtoList.size() - 1;
-        Table.setRowSelectionInterval(row, row);
-        Table.scrollRectToVisible(Table.getCellRect(row, 0, true));*/
-        txCodigo.setEnabled(true);
-        txDescricao.setEnabled(true);
-        Produto a = new Produto();
-        entityManager.persist(a);
-        produtoList.add(a);
-        int row = produtoList.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+        /*
+         txCodigo.setEnabled(true);
+         txDescricao.setEnabled(true);
+         Produto a = new Produto();
+         entityManager.persist(a);
+         produtoList.add(a);
+         int row = produtoList.size() - 1;
+         masterTable.setRowSelectionInterval(row, row);
+         masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+         */
     }//GEN-LAST:event_BtNovoActionPerformed
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-            JOptionPane.showMessageDialog(null, "Salvo!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<Produto> merged = new ArrayList<Produto>(produtoList.size());
-            for (Produto a : produtoList) {
-                merged.add(entityManager.merge(a));
-            }
-            produtoList.clear();
-            produtoList.addAll(merged);
-        }
+        /*  try {
+         entityManager.getTransaction().commit();
+         entityManager.getTransaction().begin();
+         JOptionPane.showMessageDialog(null, "Salvo!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+         } catch (RollbackException rex) {
+         rex.printStackTrace();
+         entityManager.getTransaction().begin();
+         List<Produto> merged = new ArrayList<Produto>(produtoList.size());
+         for (Produto a : produtoList) {
+         merged.add(entityManager.merge(a));
+         }
+         produtoList.clear();
+         produtoList.addAll(merged);
+         }
+         */
     }//GEN-LAST:event_BtSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtAnterior;
-    private javax.swing.JButton BtExcluir;
-    private javax.swing.JButton BtLimpar;
     private javax.swing.JButton BtNovo;
     private javax.swing.JButton BtPrimeiro;
     private javax.swing.JButton BtProximo;
     private javax.swing.JButton BtSalvar;
     private javax.swing.JButton BtUltimo;
-    private javax.persistence.EntityManager entityManager;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPbotoes;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable masterTable;
-    private java.util.List<com.destrosul.entity.Produto> produtoList;
-    private javax.persistence.Query produtoQuery;
+    private javax.swing.JButton removeButton;
     private javax.swing.JTextField txCodigo;
     private javax.swing.JTextField txDescricao;
+    private javax.swing.JButton updateButton;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -388,18 +411,99 @@ public class ProdutoView extends JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ProdutoView().setVisible(true);
-                //JDialog dialog = new JDialog(new JFrame(), "Clientes", true);
-                //dialog.setContentPane(new ClienteView());
-                //dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                //dialog.pack();
-                //dialog.setLocationRelativeTo(null);
-                //dialog.setVisible(true);
-
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ProdutoView().setVisible(true);
         });
+    }
+
+    private class ProdutoTableModel extends AbstractTableModel {
+
+        private List<Produto> produtos;
+        private final String[] columnNames = {"ID", "Número", "Descrição"};
+        private final int COLUMN_COUNT = columnNames.length;
+
+        public ProdutoTableModel() {
+            produtos = new ArrayList();
+        }
+
+        public ProdutoTableModel(List<Produto> produtos) {
+            this();
+            this.produtos.addAll(produtos);
+        }
+
+        @Override
+        public int getRowCount() {
+            return produtos.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return COLUMN_COUNT;
+        }
+
+        @Override
+        public String getColumnName(int i) {
+            return columnNames[i];
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Produto produto = produtos.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return produto.getIdProduto();
+                case 1:
+                    return produto.getNrProduto();
+                case 2:
+                    return produto.getDescricao();
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            Produto produto = produtos.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    produto.setIdProduto(Long.parseLong(aValue.toString()));
+                    break;
+                case 1:
+                    produto.setNrProduto(aValue.toString());
+                    break;
+                case 2:
+                    produto.setDescricao(aValue.toString());
+                    break;
+            }
+            fireTableDataChanged();
+        }
+
+    }
+
+    private class ProdutoMasterTableListSelectionListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            int row = masterTable.getSelectedRow();
+            if (row >= 0) {
+                Produto u = model.getProdutos().get(row);
+                Produto backup = new Produto();
+                backup.setIdProduto(u.getIdProduto());
+                backup.setNrProduto(u.getNrProduto());
+                backup.setDescricao(u.getDescricao());
+                model.setBackupRegistro(backup);
+
+                Produto selecionado = new Produto();
+                selecionado.setIdProduto(u.getIdProduto());
+                selecionado.setNrProduto(u.getNrProduto());
+                selecionado.setDescricao(u.getDescricao());
+
+                model.setRegistroSelecionado(selecionado);
+            }
+        }
     }
 
 }

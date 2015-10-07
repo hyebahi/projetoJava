@@ -5,7 +5,6 @@
  */
 package com.destrosul.view;
 
-import com.destrosul.entity.Cliente;
 import java.awt.EventQueue;
 import java.beans.Beans;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -32,36 +30,11 @@ public class ClienteView extends JFrame {
         initComponents();
         // myInitComponets();
         if (!Beans.isDesignTime()) {
-            entityManagerCliente.getTransaction().begin();
+            entityManager.getTransaction().begin();
         }
-        //BtPrimeiro.doClick();
+        BtPrimeiro.doClick();
 
     }
-
-//    private void myInitComponets() {
-//        bindingGroup = new BindingGroup();
-//
-//        ClienteDAO dao = new ClienteDAOImp();
-//        clienteList = ObservableCollections.observableList(dao.findAll());
-//        //MtableCliente.setModel(new UsuarioTableModel(listCliente));
-//
-//        JTableBinding jTableBinding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ_WRITE, clienteList, MtableCliente);
-//        JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${id}"));
-//        columnBinding.setColumnName("ID");
-//        columnBinding.setColumnClass(Integer.class);
-//        columnBinding = jTableBinding.addColumnBinding(ELProperty.create("${nome}"));
-//        columnBinding.setColumnName("Nome");
-//        columnBinding.setColumnClass(String.class);
-//
-//        bindingGroup.addBinding(jTableBinding);
-//        jTableBinding.bind();
-//
-//        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ, MtableCliente, ELProperty.create("${selectedElement.nome}"), TxNome, BeanProperty.create("text"));
-//        binding.setSourceUnreadableValue("null");
-//        bindingGroup.addBinding(binding);
-//
-//        bindingGroup.bind();
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,8 +45,10 @@ public class ClienteView extends JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManagerCliente = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("DestrosulPU").createEntityManager();
-        clienteQuery = java.beans.Beans.isDesignTime() ? null : entityManagerCliente.createQuery("SELECT c FROM Cliente c");
+        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("DestrosulPU").createEntityManager();
+        Query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT c FROM Cliente c");
+        List = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : Query.getResultList();
+        clienteQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT c FROM Cliente c");
         clienteList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : clienteQuery.getResultList();
         jPbotoes = new javax.swing.JPanel();
         TxNome = new javax.swing.JTextField();
@@ -106,21 +81,23 @@ public class ClienteView extends JFrame {
         jLabel2.setText("CNPJ");
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, clienteList, ClienteTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
-        columnBinding.setColumnName("Nome");
-        columnBinding.setColumnClass(String.class);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(java.math.BigDecimal.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cnpj}"));
         columnBinding.setColumnName("Cnpj");
         columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cep}"));
-        columnBinding.setColumnName("Cep");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
+        columnBinding.setColumnName("Nome");
+        columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numero}"));
         columnBinding.setColumnName("Numero");
         columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cep}"));
+        columnBinding.setColumnName("Cep");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-
         jScrollPane1.setViewportView(ClienteTable);
 
         javax.swing.GroupLayout jPbotoesLayout = new javax.swing.GroupLayout(jPbotoes);
@@ -275,14 +252,14 @@ public class ClienteView extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLimparActionPerformed
-        entityManagerCliente.getTransaction().rollback();
-        entityManagerCliente.getTransaction().begin();
-        java.util.Collection data = clienteQuery.getResultList();
+        entityManager.getTransaction().rollback();
+        entityManager.getTransaction().begin();
+        java.util.Collection data = Query.getResultList();
         for (Object entity : data) {
-            entityManagerCliente.refresh(entity);
+            entityManager.refresh(entity);
         }
-        clienteList.clear();
-        clienteList.addAll(data);
+        List.clear();
+        List.addAll(data);
     }//GEN-LAST:event_BtLimparActionPerformed
 
     private void BtPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtPrimeiroActionPerformed
@@ -322,11 +299,11 @@ public class ClienteView extends JFrame {
             int[] selected = ClienteTable.getSelectedRows();
             List<com.destrosul.entity.Cliente> toRemove = new ArrayList<com.destrosul.entity.Cliente>(selected.length);
             for (int idx = 0; idx < selected.length; idx++) {
-                 com.destrosul.entity.Cliente a = clienteList.get(ClienteTable.convertRowIndexToModel(selected[idx]));
+                 com.destrosul.entity.Cliente a = List.get(ClienteTable.convertRowIndexToModel(selected[idx]));
                 toRemove.add(a);
-                entityManagerCliente.remove(a);
+                entityManager.remove(a);
             }
-            clienteList.removeAll(toRemove);
+            List.removeAll(toRemove);
         } else {
             JOptionPane.showMessageDialog(null, "Operação cancelada!", "Informação", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -334,27 +311,27 @@ public class ClienteView extends JFrame {
 
     private void BtNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtNovoActionPerformed
         com.destrosul.entity.Cliente a = new com.destrosul.entity.Cliente();
-        entityManagerCliente.persist(a);
-        clienteList.add(a);
-        int row = clienteList.size() - 1;
+        entityManager.persist(a);
+        List.add(a);
+        int row = List.size() - 1;
         ClienteTable.setRowSelectionInterval(row, row);
         ClienteTable.scrollRectToVisible(ClienteTable.getCellRect(row, 0, true));
     }//GEN-LAST:event_BtNovoActionPerformed
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
         try {
-            entityManagerCliente.getTransaction().commit();
-            entityManagerCliente.getTransaction().begin();
+            entityManager.getTransaction().commit();
+            entityManager.getTransaction().begin();
             JOptionPane.showMessageDialog(null, "Salvo!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         } catch (RollbackException rex) {
             rex.printStackTrace();
-            entityManagerCliente.getTransaction().begin();
-            List<com.destrosul.entity.Cliente> merged = new ArrayList<com.destrosul.entity.Cliente>(clienteList.size());
-            for (com.destrosul.entity.Cliente a : clienteList) {
-                merged.add(entityManagerCliente.merge(a));
+            entityManager.getTransaction().begin();
+            List<com.destrosul.entity.Cliente> merged = new ArrayList<com.destrosul.entity.Cliente>(List.size());
+            for (com.destrosul.entity.Cliente a : List) {
+                merged.add(entityManager.merge(a));
             }
-            clienteList.clear();
-            clienteList.addAll(merged);
+            List.clear();
+            List.addAll(merged);
         }
     }//GEN-LAST:event_BtSalvarActionPerformed
 
@@ -369,11 +346,13 @@ public class ClienteView extends JFrame {
     private javax.swing.JButton BtSalvar;
     private javax.swing.JButton BtUltimo;
     private javax.swing.JTable ClienteTable;
+    private java.util.List<com.destrosul.entity.Cliente> List;
+    private javax.persistence.Query Query;
     private javax.swing.JTextField TxCnpj;
     private javax.swing.JTextField TxNome;
     private java.util.List<com.destrosul.entity.Cliente> clienteList;
     private javax.persistence.Query clienteQuery;
-    private javax.persistence.EntityManager entityManagerCliente;
+    private javax.persistence.EntityManager entityManager;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;

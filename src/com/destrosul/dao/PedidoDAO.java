@@ -6,6 +6,7 @@
 package com.destrosul.dao;
 
 import com.destrosul.entity.Pedido;
+import com.destrosul.entity.Usuario;
 import com.destrosul.util.JPAUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,42 +18,51 @@ import javax.persistence.TypedQuery;
  */
 public class PedidoDAO implements IDAO<Pedido>{
     
-    private final EntityManager entityManager;
+    private final EntityManager Manager;
     
     public PedidoDAO() {
-      entityManager = JPAUtil.getEntityManager();
+      Manager = JPAUtil.getEntityManager();
     }
     
     @Override
     public Pedido save(Pedido pedido) {
-         entityManager.getTransaction().begin();
-        Pedido merged = entityManager.merge(pedido);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+         Manager.getTransaction().begin();
+        Pedido merged = Manager.merge(pedido);
+        Manager.getTransaction().commit();
+        Manager.close();
         return merged;
     }
-
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
-    public Pedido findById(Long IdPedido) {
-        Pedido pedido = entityManager.find(Pedido.class, IdPedido);
-        entityManager.close();
+    public Pedido findById(Long id) {
+        Pedido pedido = Manager.find(Pedido.class, id);
+        Manager.close();
         return pedido;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
      public List<Pedido> findAll() {
-        TypedQuery<Pedido> query = entityManager.createNamedQuery("Pedido.findAll", Pedido.class);
-        List<Pedido> pedidos = query.getResultList();
-        entityManager.close();
+        //TypedQuery<Pedido> query = Manager.createNamedQuery("Pedido.findAll", Pedido.class);
+        //List<Pedido> pedidos = query.getResultList();
+        List<Pedido> pedidos = Manager.createNamedQuery("Pedido.findAll", Pedido.class).getResultList();
+        Manager.close();
         return pedidos;
     }
 
     @Override
      public void remove(Pedido pedido) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(pedido);
-        entityManager.getTransaction().commit();
-        entityManager.close();    
+        Manager.getTransaction().begin();
+        Manager.remove(pedido);
+        Manager.getTransaction().commit();
+        Manager.close();    
     }
     
     

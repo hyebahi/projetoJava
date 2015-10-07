@@ -5,6 +5,8 @@
  */
 package com.destrosul.entity;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -32,6 +35,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "Cliente.findByCep", query = "SELECT c FROM Cliente c WHERE c.cep = :cep"),
     @NamedQuery(name = "Cliente.findByNumero", query = "SELECT c FROM Cliente c WHERE c.numero = :numero")})
 public class Cliente implements Serializable {
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -60,7 +65,9 @@ public class Cliente implements Serializable {
     }
 
     public void setId(BigDecimal id) {
+        BigDecimal oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getNome() {
@@ -68,7 +75,9 @@ public class Cliente implements Serializable {
     }
 
     public void setNome(String nome) {
+        String oldNome = this.nome;
         this.nome = nome;
+        changeSupport.firePropertyChange("nome", oldNome, nome);
     }
 
     public String getCnpj() {
@@ -76,7 +85,9 @@ public class Cliente implements Serializable {
     }
 
     public void setCnpj(String cnpj) {
+        String oldCnpj = this.cnpj;
         this.cnpj = cnpj;
+        changeSupport.firePropertyChange("cnpj", oldCnpj, cnpj);
     }
 
     public BigInteger getCep() {
@@ -84,7 +95,9 @@ public class Cliente implements Serializable {
     }
 
     public void setCep(BigInteger cep) {
+        BigInteger oldCep = this.cep;
         this.cep = cep;
+        changeSupport.firePropertyChange("cep", oldCep, cep);
     }
 
     public BigInteger getNumero() {
@@ -92,7 +105,9 @@ public class Cliente implements Serializable {
     }
 
     public void setNumero(BigInteger numero) {
+        BigInteger oldNumero = this.numero;
         this.numero = numero;
+        changeSupport.firePropertyChange("numero", oldNumero, numero);
     }
 
     @Override
@@ -118,6 +133,14 @@ public class Cliente implements Serializable {
     @Override
     public String toString() {
         return "com.destrosul.entity.Cliente[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

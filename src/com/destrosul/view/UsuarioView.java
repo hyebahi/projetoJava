@@ -37,7 +37,7 @@ public class UsuarioView extends javax.swing.JFrame {
     private UsuarioController controller = new UsuarioController(model);
 
     /**
-     * Creates new form ManutencaoProdutoView
+     * Creates new form 
      */
     public UsuarioView() {
         initComponents();

@@ -6,8 +6,12 @@
 package com.destrosul.view;
 
 import com.destrosul.controller.PedidoController;
+import com.destrosul.entity.Pedido;
 import com.destrosul.model.PedidoModel;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.table.AbstractTableModel;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -32,9 +36,7 @@ public class PedidoView extends javax.swing.JFrame {
         controller = new PedidoController(model);
 
         initComponents();
-
-        controller.PedidoLoad();
-
+        controller.CarregaPedido();
         doBindings();
     }
 
@@ -47,6 +49,8 @@ public class PedidoView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTablePedido = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         FieldNumero = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -63,7 +67,7 @@ public class PedidoView extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableLinha = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         BtNovo = new javax.swing.JButton();
         BtSalvar = new javax.swing.JButton();
@@ -74,6 +78,19 @@ public class PedidoView extends javax.swing.JFrame {
         BtAnterior = new javax.swing.JButton();
         BtProximo = new javax.swing.JButton();
         BtUltimo = new javax.swing.JButton();
+
+        jTablePedido.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTablePedido);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pedido");
@@ -157,7 +174,7 @@ public class PedidoView extends javax.swing.JFrame {
 
         FieldNumero.getAccessibleContext().setAccessibleName("Pedido");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableLinha.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -168,7 +185,7 @@ public class PedidoView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableLinha);
 
         jToolBar1.setRollover(true);
 
@@ -431,8 +448,10 @@ public class PedidoView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableLinha;
+    private javax.swing.JTable jTablePedido;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
@@ -441,11 +460,77 @@ public class PedidoView extends javax.swing.JFrame {
         BindingGroup bindingGroup = new BindingGroup();
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, model,
-                ELProperty.create("${pedido.numero}"), FieldNumero, BeanProperty.create("text"));
+                ELProperty.create("${numero}"), FieldNumero, BeanProperty.create("text"));
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         bindingGroup.bind();
 
     }
+    
+    private class PedidoTableModel extends AbstractTableModel {
+
+        private List<Pedido> pedidos;        
+        private final String[] columnNames = {"ID", "NR", "Cliente"};
+        private final int COLUMN_COUNT = columnNames.length;
+
+        public PedidoTableModel() {
+            pedidos = new ArrayList();
+        }
+
+        public PedidoTableModel(List<Pedido> pedidos) {
+            this();
+            this.pedidos.addAll(pedidos);
+        }
+
+        @Override
+        public int getRowCount() {
+            return pedidos.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return COLUMN_COUNT;
+        }
+
+        @Override
+        public String getColumnName(int i) {
+            return columnNames[i];
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Pedido pedido = pedidos.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return pedido.getIdPedido();
+                case 1:
+                    return pedido.getNumero();
+                case 2:
+                    return pedido.getIdCliente();
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            Pedido pedido = pedidos.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    pedido.setIdPedido(Long.parseLong(aValue.toString()));
+                    break;
+                case 1:
+                    pedido.setNumero(Long.parseLong(aValue.toString()));
+                    break;
+                case 2:
+                    pedido.setIdCliente(Long.parseLong(aValue.toString()));
+                    break;                
+            }
+            fireTableDataChanged();
+        }
+
+    }    
+    
+    
 }

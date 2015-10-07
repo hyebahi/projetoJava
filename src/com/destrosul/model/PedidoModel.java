@@ -19,7 +19,7 @@ import java.util.TreeMap;
  */
 public class PedidoModel extends BindableModel {
     
-    //private Pedido pedido;
+    private Pedido pedido;
     private List<Pedido> pedidoList;
     private Pedido pedidoSelecionado;
     private NavigableMap<Long, Pedido> pedidoNavigableMap;

@@ -19,6 +19,10 @@ public class PedidoController {
     private final PedidoModel model;
     private PedidoDAO PedidoDAO;
 
+    /**
+     *
+     * @param model
+     */
     public PedidoController(PedidoModel model) {
         this.model = model;
     }
@@ -26,11 +30,15 @@ public class PedidoController {
     /**
      * Efetua carga a partir dos registros da tabela inscricao
      */
-    public void PedidoLoad() {
+    public void CarregaPedido() {
         PedidoDAO = new PedidoDAO();
-        List<Pedido> inscricoes = PedidoDAO.findAll();
-        model.setPedido(inscricoes);
-        model.setPedidoMap(inscricoes);
+        List<Pedido> pedido = PedidoDAO.findAll();
+        model.setPedido(pedido);
+        model.setPedidoMap(pedido);
+    }
+    
+     public PedidoModel getModel() {
+        return model;
     }
 
 }

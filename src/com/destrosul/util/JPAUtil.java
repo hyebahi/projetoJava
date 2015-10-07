@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
  */
 public class JPAUtil {
 
-    private static final String PERSISTENCE_UNIT_NAME = "ProjetoFinalPU";
+    private static final String PERSISTENCE_UNIT_NAME = "DestrosulPU";
     private static EntityManagerFactory emf;
 
     private JPAUtil() {
@@ -34,6 +34,9 @@ public class JPAUtil {
      * @return EntityManager
      */
     public static EntityManager getEntityManager() {
+        if (emf == null) {
+            createEntityManagerFactory();
+        }
         return emf.createEntityManager();
     }
 
